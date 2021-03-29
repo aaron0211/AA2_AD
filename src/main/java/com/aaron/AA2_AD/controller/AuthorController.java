@@ -1,7 +1,6 @@
 package com.aaron.AA2_AD.controller;
 
 import com.aaron.AA2_AD.domain.Author;
-import com.aaron.AA2_AD.domain.dto.AuthorDTO;
 import com.aaron.AA2_AD.exception.AuthorNotFoundException;
 import com.aaron.AA2_AD.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+
+import static com.aaron.AA2_AD.controller.Response.NOT_FOUND;
 
 @RestController
 @Tag(name = "Authors", description = "Listado de autores")
@@ -65,7 +66,17 @@ public class AuthorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addedauthor);
     }
 
-    //TODO modifyAuthor();
+    @Operation(summary = "Modifica un autor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se modifica el autor",content = @Content(schema = @Schema(implementation = Author.class))),
+            @ApiResponse(responseCode = "404", description = "El autor no existe", content = @Content(schema = @Schema(implementation = Author.class)))
+    })
+    @PutMapping(value = "/authors/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<Author> modifyAuthor(@PathVariable long id,@RequestBody Author newAuthor){
+        Author author = authorService.modifyAuthor(id,newAuthor);
+        logger.info("Modificado el autor: " + author.getId());
+        return new ResponseEntity<>(author,HttpStatus.OK);
+    }
 
     @Operation(summary = "Elimina un autor")
     @ApiResponses(value = {
@@ -75,6 +86,16 @@ public class AuthorController {
     @DeleteMapping(value = "/authors/{id}",produces = "application/json")
     public ResponseEntity<Response> deleteAuthor(@PathVariable long id){
         authorService.deleteAuthor(id);
+        logger.info("Eliminado el autor: " + id);
         return new ResponseEntity<>(Response.noErrorResponse(),HttpStatus.OK);
+    }
+
+    @ExceptionHandler(AuthorNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Response> handleException(AuthorNotFoundException anfe){
+        Response response = Response.errorResponse(NOT_FOUND, anfe.getMessage());
+        logger.error(anfe.getMessage(), anfe);
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
 }
