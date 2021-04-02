@@ -50,6 +50,7 @@ public class AuthorController {
     })
     @GetMapping(value = "/authors/{id}", produces = "application/json")
     public ResponseEntity<Author> getAuthor(@PathVariable long id){
+        logger.info("Buscándo autor: " + id);
         Author author = authorService.findById(id)
                 .orElseThrow(()->new AuthorNotFoundException(id));
         return  new ResponseEntity<>(author,HttpStatus.OK);
@@ -62,7 +63,7 @@ public class AuthorController {
     @PostMapping(value = "/authors", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Author> addAuthor(@RequestBody Author author){
         Author addedauthor = authorService.addAuthor(author);
-        logger.info("Añadido el autor: " + addedauthor.getName());
+        logger.info("Añadido el autor: " + addedauthor.getName() + " " + addedauthor.getSurname());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedauthor);
     }
 
@@ -88,6 +89,21 @@ public class AuthorController {
         authorService.deleteAuthor(id);
         logger.info("Eliminado el autor: " + id);
         return new ResponseEntity<>(Response.noErrorResponse(),HttpStatus.OK);
+    }
+
+    @Operation(summary = "Modifica el valor height de un autor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se ha modificado el campo",content = @Content(schema = @Schema(implementation = Author.class))),
+            @ApiResponse(responseCode = "404", description = "El autor no existe", content = @Content(schema = @Schema(implementation = Author.class)))
+    })
+    @PatchMapping(value = "/authors/{id}/change-height", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<Author> changeAlive(@PathVariable long id, @RequestBody float height){
+        Author author = authorService.findById(id)
+                        .orElseThrow(()->new AuthorNotFoundException(id));
+        author.setHeight(height);
+        authorService.modifyAuthor(id,author);
+        logger.info("Modificado el valor height a: " + height);
+        return  new ResponseEntity<>(author,HttpStatus.OK);
     }
 
     @ExceptionHandler(AuthorNotFoundException.class)
