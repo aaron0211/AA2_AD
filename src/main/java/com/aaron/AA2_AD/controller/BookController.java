@@ -1,6 +1,7 @@
 package com.aaron.AA2_AD.controller;
 
 import com.aaron.AA2_AD.domain.Book;
+import com.aaron.AA2_AD.domain.dto.BookDTO;
 import com.aaron.AA2_AD.exception.BookNotFoundException;
 import com.aaron.AA2_AD.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,7 +49,7 @@ public class BookController {
             @ApiResponse(responseCode = "200",description = "Existe el libro",content = @Content(schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "404", description = "El libro no existe", content = @Content(schema = @Schema(implementation = Book.class)))
     })
-    @GetMapping(value = "/books/{id}", produces = "application/json")
+    @GetMapping(value = "/book/{id}", produces = "application/json")
     public ResponseEntity<Book> getBook(@PathVariable long id){
         logger.info("Buscándo libro: " + id);
         Book book = bookService.findById(id)
@@ -60,9 +61,9 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Se registra el autor", content = @Content(schema = @Schema(implementation = Book.class)))
     })
-    @PostMapping(value = "/books", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Book> addBook(@RequestBody Book book){
-        Book addedBook = bookService.addBook(book);
+    @PostMapping(value = "/book", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO){
+        Book addedBook = bookService.addBook(bookDTO);
         logger.info("Añadido el libro: " + addedBook.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedBook);
     }
@@ -72,7 +73,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Se modifica el libro",content = @Content(schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "404", description = "El libro no existe", content = @Content(schema = @Schema(implementation = Book.class)))
     })
-    @PutMapping(value = "/books/{id}", produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "/book/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Book> modifyBook(@PathVariable long id,@RequestBody Book newBook){
         Book book = bookService.modifyBook(id,newBook);
         logger.info("Modificado el libro: " + book.getId());
@@ -84,7 +85,7 @@ public class BookController {
             @ApiResponse(responseCode = "200",description = "Se ha eliminado el libro",content = @Content(schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "404", description = "El libro no existe", content = @Content(schema = @Schema(implementation = Book.class)))
     })
-    @DeleteMapping(value = "/books/{id}",produces = "application/json")
+    @DeleteMapping(value = "/book/{id}",produces = "application/json")
     public ResponseEntity<Response> deleteBook(@PathVariable long id){
         bookService.deleteBook(id);
         logger.info("Eliminado el libro: " + id);
@@ -96,7 +97,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Se ha modificado el campo",content = @Content(schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "404", description = "El libro no existe", content = @Content(schema = @Schema(implementation = Book.class)))
     })
-    @PatchMapping(value = "/books/{id}/change-good", produces = "application/json", consumes = "application/json")
+    @PatchMapping(value = "/book/{id}/change-good", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Book> changeGood(@PathVariable long id, @RequestBody boolean good){
         Book book = bookService.findById(id)
                 .orElseThrow(()->new BookNotFoundException(id));

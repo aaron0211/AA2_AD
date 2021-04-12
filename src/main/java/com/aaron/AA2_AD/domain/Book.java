@@ -35,7 +35,7 @@ public class Book {
     @Schema(description = "Precio de compra del libro", example = "16.99", defaultValue = "0.00")
     @Column(name = "precio_compra")
     @Min(value = 0)
-    private float price;
+    private float prize;
 
     @Schema(description = "Estado del libro", example = "true")
     @Column

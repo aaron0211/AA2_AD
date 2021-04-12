@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,12 +21,12 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Schema(description = "Fecha del prestamo", example = "01/04/2021 18:30:00")
+    @Schema(description = "Fecha del prestamo", example = "01/04/2021 18:30:00", required = true)
     @Column(name = "loan_date")
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime loanDate;
 
-    @Schema(description = "Fecha de devolucion", example = "05/04/2021 10:00:00")
+    @Schema(description = "Fecha de devolucion", example = "05/04/2021")
     @Column(name = "return_date")
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime returnDate;

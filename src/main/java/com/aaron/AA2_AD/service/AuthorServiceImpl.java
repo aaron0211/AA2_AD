@@ -26,6 +26,11 @@ public class AuthorServiceImpl  implements AuthorService{
     }
 
     @Override
+    public Optional<Author> findByName(String name){
+        return authorRepository.findByName(name);
+    }
+
+    @Override
     public Author addAuthor(Author author) {
         return authorRepository.save(author);
     }
@@ -43,5 +48,20 @@ public class AuthorServiceImpl  implements AuthorService{
         authorRepository.findById(id)
                 .orElseThrow(()-> new AuthorNotFoundException(id));
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Author> findByIsAliveFalse() {
+        return authorRepository.findByIsAliveFalse();
+    }
+
+    @Override
+    public Set<Author> findNameContaining(String name) {
+        return authorRepository.findByNameContaining(name);
+    }
+
+    @Override
+    public Set<Author> findQuery(boolean alive, boolean good, String editorial) {
+        return authorRepository.findQuery(alive, good, editorial);
     }
 }

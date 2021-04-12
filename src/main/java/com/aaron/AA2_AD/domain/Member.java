@@ -25,11 +25,6 @@ public class Member {
     @Column
     private String name;
 
-    @Schema(description = "Apellidos del socio", example = "Perez Gonzalez")
-    @NotBlank
-    @Column
-    private String surname;
-
     @Schema(description = "Direccion del socio", example = "Calle Mayor 1")
     @NotBlank
     @Column
@@ -40,6 +35,7 @@ public class Member {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dateBirth;
 
+    @Schema(description = "Altura", example = "1.75")
     @Column
     private float height;
 

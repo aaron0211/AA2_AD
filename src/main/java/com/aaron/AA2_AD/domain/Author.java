@@ -25,11 +25,6 @@ public class Author {
     @Column
     private String name;
 
-    @Schema(description = "Apellidos del autor", example = "Cervantes")
-    @NotBlank
-    @Column
-    private String surname;
-
     @Schema(description = "Fecha de nacimiento", example = "24/02/1965")
     @Column(name = "date_birth")
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

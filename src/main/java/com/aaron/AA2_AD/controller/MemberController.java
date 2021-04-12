@@ -48,7 +48,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200",description = "Existe el socio",content = @Content(schema = @Schema(implementation = Member.class))),
             @ApiResponse(responseCode = "404", description = "El socio no existe", content = @Content(schema = @Schema(implementation = Member.class)))
     })
-    @GetMapping(value = "/members/{id}", produces = "application/json")
+    @GetMapping(value = "/member/{id}", produces = "application/json")
     public ResponseEntity<Member> getMember(@PathVariable long id){
         logger.info("Buscando socio: " + id);
         Member member = memberService.findById(id)
@@ -60,23 +60,23 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Se registra el socio", content = @Content(schema = @Schema(implementation = Member.class)))
     })
-    @PostMapping(value = "/members", produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "/member", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Member> addMember(@RequestBody Member member){
         Member addedMember = memberService.addMember(member);
-        logger.info("Añadido el socio: " + addedMember.getName() + " " + addedMember.getSurname());
+        logger.info("Añadido el socio: " + addedMember.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedMember);
     }
 
     @Operation(summary = "Modifica un socio")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Se modifica el socio",content = @Content(schema = @Schema(implementation = Member.class))),
+            @ApiResponse(responseCode = "201", description = "Se modifica el socio",content = @Content(schema = @Schema(implementation = Member.class))),
             @ApiResponse(responseCode = "404", description = "El socio no existe", content = @Content(schema = @Schema(implementation = Member.class)))
     })
-    @PutMapping(value = "/members/{id}", produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "/member/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Member> modifyMember(@PathVariable long id,@RequestBody Member newMember){
         Member member = memberService.modifyMember(id,newMember);
         logger.info("Modificado el socio: " + member.getId());
-        return new ResponseEntity<>(member,HttpStatus.OK);
+        return new ResponseEntity<>(member,HttpStatus.CREATED);
     }
 
     @Operation(summary = "Elimina un socio")
@@ -84,7 +84,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200",description = "Se ha eliminado el socio",content = @Content(schema = @Schema(implementation = Member.class))),
             @ApiResponse(responseCode = "404", description = "El socio no existe", content = @Content(schema = @Schema(implementation = Member.class)))
     })
-    @DeleteMapping(value = "/members/{id}",produces = "application/json")
+    @DeleteMapping(value = "/member/{id}",produces = "application/json")
     public ResponseEntity<Response> deleteMember(@PathVariable long id){
         memberService.deleteMember(id);
         logger.info("Eliminado el socio: " + id);
@@ -96,7 +96,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Se ha modificado el campo",content = @Content(schema = @Schema(implementation = Member.class))),
             @ApiResponse(responseCode = "404", description = "El socio no existe", content = @Content(schema = @Schema(implementation = Member.class)))
     })
-    @PatchMapping(value = "/members/{id}/change-address", produces = "application/json", consumes = "application/json")
+    @PatchMapping(value = "/member/{id}/change-address", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Member> changeAddress(@PathVariable long id, @RequestBody String address){
         Member member = memberService.findById(id)
                 .orElseThrow(()->new MemberNotFoundException(id));
