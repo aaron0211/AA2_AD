@@ -20,7 +20,7 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Schema(description = "Nombre del autor", example = "Miguel",required = true)
+    @Schema(description = "Nombre del autor", example = "Miguel Cervantes",required = true)
     @NotBlank
     @Column
     private String name;
@@ -30,7 +30,7 @@ public class Author {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dateBirth;
 
-    @Schema(description = "Altura", example = "175.0", defaultValue = "0.00")
+    @Schema(description = "Altura", example = "1.75", defaultValue = "0.00")
     @Column
     private float height;
 
