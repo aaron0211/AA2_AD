@@ -54,6 +54,6 @@ public class Book {
     @JsonBackReference(value = "author")
     private Author author;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<Loan> loans;
 }

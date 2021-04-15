@@ -43,6 +43,6 @@ public class Member {
     @Column
     private Boolean activ;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Loan> loans;
 }

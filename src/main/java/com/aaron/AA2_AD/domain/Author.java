@@ -38,6 +38,6 @@ public class Author {
     @Column
     private Boolean isAlive;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     private List<Book> books;
 }
